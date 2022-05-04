@@ -19,6 +19,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/main_new_list_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:text="Enter in new list name" />
+
+            <Button
+                android:id="@+id/main_button_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="Add new list" />
+        </LinearLayout>
+
         <ScrollView
             android:id="@+id/main_scroll_container"
             android:layout_width="match_parent"
@@ -31,22 +52,11 @@
                 android:orientation="vertical" >
 
                 <Button
-                    android:id="@+id/button3"
+                    android:id="@+id/main_container_lists_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Button" />
 
-                <Button
-                    android:id="@+id/button4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Button" />
-
-                <Button
-                    android:id="@+id/button5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Button" />
             </LinearLayout>
         </ScrollView>
 
@@ -60,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="10"
-                android:text="Entry list name" />
+                android:text="search list" />
 
             <Button
                 android:id="@+id/main_search_button"
@@ -77,14 +87,14 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/imageButton5"
+                android:id="@+id/main_schedule__button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 app:srcCompat="@android:drawable/ic_menu_my_calendar" />
 
             <ImageButton
-                android:id="@+id/imageButton4"
+                android:id="@+id/main_add_list_2_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
