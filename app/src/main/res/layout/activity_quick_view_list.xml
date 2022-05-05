@@ -52,55 +52,71 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:background="@color/black"
+                    >
 
                     <CheckBox
                         android:id="@+id/checkBox"
                         android:layout_width="37dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1" />
+                        android:layout_margin="1dp"
+                        android:layout_weight="2"
+                        android:background="@color/white" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/textView5"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:background="@color/white"
+                        android:layout_margin="1dp"
                         android:text="date" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/textView"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:background="@color/white"
+                        android:layout_margin="1dp"
                         android:text="detail1" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/textView3"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="5"
+                        android:background="@color/white"
+                        android:layout_margin="1dp"
                         android:text="detail 2" />
 
                     <ImageButton
                         android:id="@+id/imageButton2"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@color/white"
+                        android:layout_margin="1dp"
                         app:srcCompat="@android:drawable/ic_menu_edit" />
 
                     <ImageButton
                         android:id="@+id/imageButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@color/white"
+                        android:layout_margin="1dp"
                         app:srcCompat="@android:drawable/ic_menu_save" />
 
                 </LinearLayout>
+
             </LinearLayout>
         </ScrollView>
 

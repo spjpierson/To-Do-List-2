@@ -47,15 +47,16 @@
             android:layout_weight="7">
 
             <LinearLayout
+                android:id="@+id/main_container_lists_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/main_container_lists_layout"
+                    android:id="@+id/main_test_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Button" />
+                    android:text="This button will be remove late" />
 
             </LinearLayout>
         </ScrollView>
