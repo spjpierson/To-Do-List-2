@@ -33,8 +33,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
-                android:hint="Search"
-                tools:ignore="TouchTargetSizeCheck" />
+                tools:ignore="HardcodedText,TouchTargetSizeCheck"
+                android:autofillHints="Search" />
 
             <Button
                 android:id="@+id/quick_view_search_button"

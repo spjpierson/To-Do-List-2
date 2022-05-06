@@ -6,7 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -32,10 +36,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     *   when click on width or arrow button start the QuickViewList intent remember later we will have to pass data
     *
     * */
+    //User input variable
+    String main_newList;
+    //The place the user is inputting the text
+    EditText main_listInput;
 
 
     Button test_button;
-
+    //New list added button
+    Button button_add;
 
 
 
@@ -44,10 +53,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // The button is only so I can get to the quick view
+        //New list add button - User input
+
+        //creating the ID paths for new list and add button
+        main_listInput = (EditText)findViewById(R.id.main_new_list_input);
+        button_add = (Button) findViewById(R.id.main_button_add);
+        //onclick listener when input added
+        button_add.setOnClickListener(new View.OnClickListener() {
+                                          @Override
+                                          public void onClick(View view) {
+                                              main_newList = main_listInput.getText().toString();
+
+                                              showToast(main_newList);
+                                          }
+                                      });
+
+
+
+    // The button is only so I can get to the quick view
         test_button = findViewById(R.id.main_test_button);
         test_button.setOnClickListener(this::onClick);
 
+}
+
+    private void showToast(String main_newList) {
+        Toast.makeText(MainActivity.this, main_newList, Toast.LENGTH_SHORT).show();
     }
 
     public void onClick(View view){
