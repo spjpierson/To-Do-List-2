@@ -1,23 +1,23 @@
 package com.piersonapps.todolist;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
+
 
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+
 import android.os.Bundle;
 import android.util.TypedValue;
-import android.view.Gravity;
+
 import android.view.View;
-import android.view.ViewGroup;
+
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.Toast;
+
 
 import java.util.ArrayList;
 
@@ -36,6 +36,8 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
     private ArrayList<ImageButton> editbuttons;
     private ArrayList<ImageButton> savebuttons;
 
+    private int rowId = 0;
+    private int rowSaveButtonId = 999999999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +55,13 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
         editText4s = new ArrayList<EditText>();
 
         editbuttons = new ArrayList<ImageButton>();
+
         savebuttons = new ArrayList<ImageButton>();
 
+
         addRowLayout();
-        addRowButton.setOnClickListener(this::onClick);
+        addRowButton.setOnClickListener(this);
+
 
     }
 
@@ -65,37 +70,43 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
 
         if(view.getId() == addRowButton.getId()){
-
             addRowLayout();
+        }else{
+            int index = 0;
 
+            do {
 
-        }
+                if(editbuttons.get(index).getId() == view.getId()){
+                  editText1s.get(index).setEnabled(true);
+                  editText2s.get(index).setEnabled(true);
+                  editText3s.get(index).setEnabled(true);
+                  editText4s.get(index).setEnabled(true);
 
-                for(int i = 0; i < (editbuttons.size()-1); ++i){
-                    if(editbuttons.get(i).getId() == view.getId()){
-                        editText1s.get(i).setEnabled(true);
-                        editText2s.get(i).setEnabled(true);
-                        editText3s.get(i).setEnabled(true);
-                        editText4s.get(i).setEnabled(true);
-                        Toast.makeText(this.getApplicationContext(),"edit button was click",Toast.LENGTH_LONG).show();
-
-                    }
- /*
-
-                    if(savebuttons.get(i).getId() == view.getId()){
-                        editText1s.get(i).setEnabled(false);
-                        editText2s.get(i).setEnabled(false);
-                        editText3s.get(i).setEnabled(false);
-                        editText4s.get(i).setEnabled(false);
-                        Toast.makeText(this.getApplicationContext(),"save button was click",Toast.LENGTH_LONG).show();
-                    }
-
-                     */
-
+                  index = (editbuttons.size()+1);
                 }
 
+                index++;
+            }while(index < editbuttons.size());
+
+            index = 0;
+
+            do{
+                if(savebuttons.get(index).getId() == view.getId()){
+                    editText1s.get(index).setEnabled(false);
+                    editText2s.get(index).setEnabled(false);
+                    editText3s.get(index).setEnabled(false);
+                    editText4s.get(index).setEnabled(false);
+
+                    index = (savebuttons.size()+1);
+                }
+
+                index++;
+            }while(index < savebuttons.size());
 
         }
+
+    }
+
 
 
 
@@ -156,16 +167,20 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
             editText4.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             editText4.setEnabled(false);
 
+
             ImageButton editButton = new ImageButton(this.getApplicationContext());
             editButton.setLayoutParams(params1Weight);
             editButton.setBackgroundColor(Color.WHITE);
             editButton.setImageResource(android.R.drawable.ic_menu_edit);
+            editButton.setId(rowId);
+
 
 
             ImageButton saveButton = new ImageButton(this.getApplicationContext());
             saveButton.setLayoutParams(params1Weight);
             saveButton.setBackgroundColor(Color.WHITE);
             saveButton.setImageResource(android.R.drawable.ic_menu_save);
+            saveButton.setId(rowSaveButtonId);
 
             row.addView(checkBox);
 
@@ -180,8 +195,9 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
             container.addView(row);
 
 
-            editButton.setOnClickListener(this::onClick);
-            saveButton.setOnClickListener(this::onClick);
+
+            editButton.setOnClickListener(this);
+            saveButton.setOnClickListener(this);
 
             checkboxs.add(checkBox);
 
@@ -192,6 +208,9 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
             editbuttons.add(editButton);
             savebuttons.add(saveButton);
+
+            rowId++;
+            rowSaveButtonId--;
 
         }
 
