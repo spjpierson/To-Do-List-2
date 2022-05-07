@@ -144,6 +144,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
             editText1.setBackgroundColor(Color.WHITE);
             editText1.setText("Detail 1");
             editText1.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            editText1.setMaxWidth(editText1.getMeasuredWidth());
             editText1.setEnabled(false);
 
             EditText editText2 = new EditText(this.getApplicationContext());
