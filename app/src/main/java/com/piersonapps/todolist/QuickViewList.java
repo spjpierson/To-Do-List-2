@@ -1,11 +1,13 @@
 package com.piersonapps.todolist;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.content.res.Resources;
 import android.graphics.Color;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 
@@ -107,9 +109,6 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
     }
 
-
-
-
         private void addRowLayout(){
             LinearLayout row = new LinearLayout(this.getApplicationContext());
             row.setOrientation(LinearLayout.HORIZONTAL);
@@ -144,7 +143,6 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
             editText1.setBackgroundColor(Color.WHITE);
             editText1.setText("Detail 1");
             editText1.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            editText1.setMaxWidth(editText1.getMeasuredWidth());
             editText1.setEnabled(false);
 
             EditText editText2 = new EditText(this.getApplicationContext());
