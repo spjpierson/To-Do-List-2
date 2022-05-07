@@ -7,12 +7,11 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:layout_width="409dp"
-        android:layout_height="729dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginStart="1dp"
         android:layout_marginTop="1dp"
         android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,10 +29,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
-                android:autofillHints="Enter New List"
-                android:text="Enter new list name"
-                tools:ignore="NestedWeights"
-                android:inputType="text" />
+                android:background="@android:color/transparent"
+                android:hint="@string/Enter_New_List"
+                android:inputType="text"
+                android:text="@string/Enter_New_List"
+                tools:ignore="NestedWeights" />
 
             <Button
                 android:id="@+id/main_button_add"
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:autofillHints="Add List"
-                android:text="Add new list" />
+                android:text="@string/Add_New_List" />
 
         </LinearLayout>
 
@@ -61,7 +61,7 @@
                     android:id="@+id/main_test_button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="This button will be remove late" />
+                    android:text="@string/This_button_will_be_remove_late" />
 
             </LinearLayout>
         </ScrollView>
@@ -76,16 +76,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="10"
-                android:text="search list"
+                android:background="@android:color/transparent"
+                android:hint="@string/search_list"
                 android:inputType="textNoSuggestions"
-                android:autofillHints="" />
+                android:text="@string/search_list" />
 
             <Button
                 android:id="@+id/main_search_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="Search" />
+                android:text="@string/Search" />
         </LinearLayout>
 
         <LinearLayout
@@ -99,9 +100,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="TODO"
                 app:srcCompat="@android:drawable/ic_menu_my_calendar"
-                tools:ignore="NestedWeights,SpeakableTextPresentCheck"
-                android:contentDescription="TODO" />
+                tools:ignore="NestedWeights,SpeakableTextPresentCheck" />
 
             <ImageButton
                 android:id="@+id/main_add_list_2_button"
