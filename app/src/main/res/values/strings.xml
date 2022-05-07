@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">To Do List</string>
+    <string name="Search">Search</string>
+    <string name="search_list">Search List</string>
+    <string name="Enter_New_List">Enter New List Name</string>
+    <string name="Add_New_List">Add New List</string>
+    <string name="This_button_will_be_remove_late">This button will be remove late</string>
 </resources>
