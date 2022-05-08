@@ -42,7 +42,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:text="search" />
+
         </LinearLayout>
+
+        <Spinner
+            android:id="@+id/quick_view_lists_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <ScrollView
             android:layout_width="match_parent"

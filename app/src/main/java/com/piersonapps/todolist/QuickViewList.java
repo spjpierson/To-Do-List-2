@@ -1,25 +1,37 @@
 package com.piersonapps.todolist;
 
-import androidx.annotation.RequiresApi;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Color;
 
-import android.os.Build;
+
 import android.os.Bundle;
+import android.os.Debug;
+import android.util.Log;
 import android.util.TypedValue;
 
+import android.view.LayoutInflater;
 import android.view.View;
 
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.Spinner;
+import android.widget.Toast;
 
+
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 
@@ -35,16 +47,28 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
     private ArrayList<EditText> editText3s;
     private ArrayList<EditText> editText4s;
 
-    private ArrayList<ImageButton> editbuttons;
-    private ArrayList<ImageButton> savebuttons;
+    private ArrayList<ImageButton> editButtons;
+    private ArrayList<ImageButton> saveButtons;
+    
+    private ArrayList<String> lists;
+
+    private Spinner listsSpinner;
 
     private int rowId = 0;
     private int rowSaveButtonId = 999999999;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quick_view_list);
+
+
+        lists = new ArrayList<String>();
+        lists.add("Med");
+        lists.add("Add New List");
 
         addRowButton = findViewById(R.id.quick_view_add_row_button);
         container = findViewById(R.id.quick_view_layout_container);
@@ -56,14 +80,62 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
         editText3s = new ArrayList<EditText>();
         editText4s = new ArrayList<EditText>();
 
-        editbuttons = new ArrayList<ImageButton>();
+        editButtons = new ArrayList<ImageButton>();
 
-        savebuttons = new ArrayList<ImageButton>();
+        saveButtons = new ArrayList<ImageButton>();
+
+        listsSpinner = findViewById(R.id.quick_view_lists_spinner);
+
+        ArrayAdapter<String> spinnerListArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, lists);
+
+        listsSpinner.setAdapter(spinnerListArrayAdapter);
+
 
 
         addRowLayout();
         addRowButton.setOnClickListener(this);
 
+        listsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(adapterView.getSelectedItem().toString().equals("Add New List")){
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(QuickViewList.this);
+                    alertDialog.setTitle("List");
+                    alertDialog.setMessage("Please Enter In the new List Below");
+
+                    EditText input = new EditText(QuickViewList.this);
+                    input.setHint("List Name");
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT);
+                    input.setLayoutParams(lp);
+                    alertDialog.setView(input);
+                    alertDialog.setIcon(android.R.drawable.ic_dialog_info);
+
+                    alertDialog.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                                        Toast.makeText(getApplicationContext(),input.getText().toString(),Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    alertDialog.setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                    alertDialog.show();
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
     }
 
@@ -78,32 +150,32 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
             do {
 
-                if(editbuttons.get(index).getId() == view.getId()){
+                if(editButtons.get(index).getId() == view.getId()){
                   editText1s.get(index).setEnabled(true);
                   editText2s.get(index).setEnabled(true);
                   editText3s.get(index).setEnabled(true);
                   editText4s.get(index).setEnabled(true);
 
-                  index = (editbuttons.size()+1);
+                  index = (editButtons.size()+1);
                 }
 
                 index++;
-            }while(index < editbuttons.size());
+            }while(index < editButtons.size());
 
             index = 0;
 
             do{
-                if(savebuttons.get(index).getId() == view.getId()){
+                if(saveButtons.get(index).getId() == view.getId()){
                     editText1s.get(index).setEnabled(false);
                     editText2s.get(index).setEnabled(false);
                     editText3s.get(index).setEnabled(false);
                     editText4s.get(index).setEnabled(false);
 
-                    index = (savebuttons.size()+1);
+                    index = (saveButtons.size()+1);
                 }
 
                 index++;
-            }while(index < savebuttons.size());
+            }while(index < saveButtons.size());
 
         }
 
@@ -144,6 +216,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
             editText1.setText("Detail 1");
             editText1.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             editText1.setEnabled(false);
+
 
             EditText editText2 = new EditText(this.getApplicationContext());
             editText2.setLayoutParams(params2Weight);
@@ -205,8 +278,8 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
             editText3s.add(editText3);
             editText4s.add(editText4);
 
-            editbuttons.add(editButton);
-            savebuttons.add(saveButton);
+            editButtons.add(editButton);
+            saveButtons.add(saveButton);
 
             rowId++;
             rowSaveButtonId--;
