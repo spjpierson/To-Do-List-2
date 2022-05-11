@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // The button is only so I can get to the quick view
         test_button = findViewById(R.id.main_test_button);
-        test_button.setOnClickListener(this::onClick);
+        test_button.setOnClickListener(this);
 
 }
 

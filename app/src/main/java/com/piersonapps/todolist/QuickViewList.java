@@ -31,7 +31,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
-import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 
@@ -52,12 +51,14 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
     
     private ArrayList<String> lists;
 
+    private ArrayList<ToDoList> rowData;
+
     private Spinner listsSpinner;
 
     private int rowId = 0;
     private int rowSaveButtonId = 999999999;
 
-
+    DaoToDoList dao;
 
 
     @Override
@@ -65,6 +66,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quick_view_list);
 
+        dao = new DaoToDoList();
 
         lists = new ArrayList<String>();
         lists.add("Add New List");
@@ -90,8 +92,6 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
         listsSpinner.setAdapter(spinnerListArrayAdapter);
 
 
-
-        addRowLayout();
         addRowButton.setOnClickListener(this);
 
         listsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -114,9 +114,14 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
                     alertDialog.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            lists.add(input.getText().toString());
 
-                              listsSpinner.setVerticalScrollbarPosition(lists.size()-1);
+                           String listName = input.getText().toString();
+                           lists.add(listName);
+
+                            listsSpinner.setSelection(lists.size()-1);
+
+                            addRowLayout(listName);
+
                         }
                     });
 
@@ -145,7 +150,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
 
         if(view.getId() == addRowButton.getId()){
-            addRowLayout();
+            addRowLayout(listsSpinner.getSelectedItem().toString());
         }else{
             int index = 0;
 
@@ -182,7 +187,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
     }
 
-        private void addRowLayout(){
+        private void addRowLayout(String listName){
             LinearLayout row = new LinearLayout(this.getApplicationContext());
             row.setOrientation(LinearLayout.HORIZONTAL);
             row.setBackgroundColor(Color.BLACK);
@@ -281,6 +286,42 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
             editButtons.add(editButton);
             saveButtons.add(saveButton);
+
+            String column1 = editText1.getText().toString();
+            String column2 = editText2.getText().toString();
+            String column3 = editText3.getText().toString();
+            String column4 = editText4.getText().toString();
+
+            if(checkboxs.size() == 1){
+                ToDoList list = new ToDoList(listName, 0, true,
+                        false, column1,column2,column3,column4,
+                        null,null,null,null,0,0,null,null);
+
+                    dao.addRow(list).addOnSuccessListener(suc->{
+                        Toast.makeText(this,"Success",Toast.LENGTH_LONG).show();
+                    }).addOnFailureListener(err->{
+                        Toast.makeText(this,"Fail: " + err.getMessage(),Toast.LENGTH_LONG).show();
+                    });
+            }else if(checkboxs.size() > 1 && checkboxs.size() != 0){
+
+                ToDoList list = new ToDoList(listName, 0, false,
+                        false, column1,column2,column3,column4,
+                        null,null,null,null,0,0,null,null);
+
+                String key = dao.getKey(list.getList());
+                Toast.makeText(this,"key: " + key, Toast.LENGTH_LONG).show();
+                editText1.setText(key);
+             /*
+
+                dao.addRow(list).addOnSuccessListener(suc->{
+                    Toast.makeText(this,"Success",Toast.LENGTH_LONG).show();
+                }).addOnFailureListener(err->{
+                    Toast.makeText(this,"Fail: " + err.getMessage(),Toast.LENGTH_LONG).show();
+                }); */
+
+                Toast.makeText(this,"Not first row",Toast.LENGTH_LONG).show();
+            }
+
 
             rowId++;
             rowSaveButtonId--;
