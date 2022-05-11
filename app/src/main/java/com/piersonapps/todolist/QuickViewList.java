@@ -67,7 +67,6 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
 
         lists = new ArrayList<String>();
-        lists.add("Med");
         lists.add("Add New List");
 
         addRowButton = findViewById(R.id.quick_view_add_row_button);
@@ -115,7 +114,9 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
                     alertDialog.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                                        Toast.makeText(getApplicationContext(),input.getText().toString(),Toast.LENGTH_SHORT).show();
+                            lists.add(input.getText().toString());
+
+                              listsSpinner.setVerticalScrollbarPosition(lists.size()-1);
                         }
                     });
 
