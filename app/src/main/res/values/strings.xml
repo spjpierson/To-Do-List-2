@@ -5,4 +5,12 @@
     <string name="Enter_New_List">Enter New List Name</string>
     <string name="Add_New_List">Add New List</string>
     <string name="This_button_will_be_remove_late">This button will be remove late</string>
+    <string name="Item1">Item 1</string>
+    <string name="Item2">Item 2</string>
+    <string name="Item3">Item 3</string>
+    <string name="Item4">Item 4</string>
+    <string name="TODO">TODO</string>
+    <string name="Groceries">Groceries</string>
+    <string name="Hardware">Hardware</string>
+    <string name="Home">Home Improvement</string>
 </resources>
