@@ -1,12 +1,12 @@
 package com.piersonapps.todolist;
 
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.HashMap;
-import java.util.Objects;
+
 
 public class DaoToDoList {
 
@@ -19,8 +19,8 @@ public class DaoToDoList {
 
     }
 
-    public String getKey(String listname){
-        return databaseReference.child(listname).child(listname).getKey();
+    public Query getData(){
+        return databaseReference.orderByKey();
     }
 
     public Task<Void> addList(String list, ToDoList header){
@@ -31,8 +31,8 @@ public class DaoToDoList {
         return databaseReference.child(row.getList()).push().setValue(row);
     }
 
-    public Task<Void> update(String list,String key, HashMap<String,Object> hashMap){
-        return databaseReference.child(list).child(key).updateChildren(hashMap);
+    public Task<Void> update(String list, HashMap<String,Object> hashMap){
+        return databaseReference.child(list).updateChildren(hashMap);
     }
 
     public Task<Void> remove(String list, String key){
