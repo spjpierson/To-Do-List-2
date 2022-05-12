@@ -2,9 +2,11 @@ package com.piersonapps.todolist;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,14 +58,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         main_listInput = (EditText)findViewById(R.id.main_new_list_input);
         button_add = (Button) findViewById(R.id.main_button_add);
         //onclick listener when input added
-        button_add.setOnClickListener(new View.OnClickListener() {
-                                          @Override
-                                          public void onClick(View view) {
-                                              main_newList = main_listInput.getText().toString();
-
-                                              showToast(main_newList);
-                                          }
-                                      });
+        button_add.setOnClickListener(this);
+ 
 
 
 
@@ -83,6 +79,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(this, QuickViewList.class);
             startActivity(intent);
         }
+        else if(view.getId() == button_add.getId()){
+            main_newList = main_listInput.getText().toString();
+            showToast(main_newList);
+        }
+    }
+    public void showPopup(View v){
+        PopupMenu popupMenu = new PopupMenu(this, v);
+        popupMenu.setOnMenuItemClickListener((PopupMenu.OnMenuItemClickListener) this);
+        popupMenu.inflate(R.menu.popup_menu);
+        popupMenu.show();
     }
 
+    public boolean onMenuItemClick(MenuItem item) {
+    switch(item.getItemId()){
+        case R.id.item1:
+            Toast.makeText(this, "Item 1 Clicked", Toast.LENGTH_SHORT).show();
+            return true;
+        case R.id.item2:
+            Toast.makeText(this, "Item 2 Clicked", Toast.LENGTH_SHORT).show();
+            return true;
+        case R.id.item3:
+            Toast.makeText(this, "Item 3 Clicked", Toast.LENGTH_SHORT).show();
+            return true;
+        case R.id.item4:
+            Toast.makeText(this, "Item 4 Clicked", Toast.LENGTH_SHORT).show();
+            return true;
+        default:
+            return false;
+}
+}
 }

@@ -32,6 +32,7 @@
                 android:background="@android:color/transparent"
                 android:hint="@string/Enter_New_List"
                 android:inputType="text"
+                android:minHeight="48dp"
                 android:text="@string/Enter_New_List"
                 tools:ignore="NestedWeights" />
 
@@ -41,7 +42,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:autofillHints="Add List"
-                android:text="@string/Add_New_List" />
+                android:onClick="showPopup"
+                android:text="@string/Add_New_List"
+                tools:ignore="UsingOnClickInXml" />
 
         </LinearLayout>
 
