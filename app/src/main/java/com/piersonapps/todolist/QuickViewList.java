@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class QuickViewList extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,6 +54,8 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
     private ArrayList<ToDoList> rowData;
 
+    private ArrayList<Integer> rowIndexing;
+
     private Spinner listsSpinner;
 
     private int rowId = 0;
@@ -67,6 +70,8 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_quick_view_list);
 
         dao = new DaoToDoList();
+
+        rowIndexing = new ArrayList<Integer>();
 
         lists = new ArrayList<String>();
         lists.add("Add New List");
@@ -292,8 +297,10 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
             String column3 = editText3.getText().toString();
             String column4 = editText4.getText().toString();
 
+            ToDoList list;
+
             if(checkboxs.size() == 1){
-                ToDoList list = new ToDoList(listName, 0, true,
+               list = new ToDoList(listName, rowId, true,
                         false, column1,column2,column3,column4,
                         null,null,null,null,0,0,null,null);
 
@@ -303,14 +310,51 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
                         Toast.makeText(this,"Fail: " + err.getMessage(),Toast.LENGTH_LONG).show();
                     });
             }else if(checkboxs.size() > 1 && checkboxs.size() != 0){
-
-                ToDoList list = new ToDoList(listName, 0, false,
+                list = new ToDoList(listName, rowId, true,
                         false, column1,column2,column3,column4,
                         null,null,null,null,0,0,null,null);
 
-                String key = dao.getKey(list.getList());
-                Toast.makeText(this,"key: " + key, Toast.LENGTH_LONG).show();
-                editText1.setText(key);
+                dao.addRow(list).addOnSuccessListener(suc->{
+                    Toast.makeText(this,"Success",Toast.LENGTH_LONG).show();
+                }).addOnFailureListener(err->{
+                    Toast.makeText(this,"Fail: " + err.getMessage(),Toast.LENGTH_LONG).show();
+                });
+
+            /*
+                 list = new ToDoList(listName, rowId, false,
+                        false, column1,column2,column3,column4,
+                        null,null,null,null,0,0,null,null);
+
+                HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put("list",list.getList());
+                hashMap.put("isHeader",false);
+                hashMap.put("check",list.isCheck());
+                hashMap.put("index",list.getIndex());
+
+                hashMap.put("column1",list.getColumn1());
+                hashMap.put("column2",list.getColumn2());
+                hashMap.put("column3",list.getColumn3());
+                hashMap.put("column4",list.getColumn4());
+
+                hashMap.put("address1",list.getAddress1());
+                hashMap.put("address2",list.getAddress2());
+                hashMap.put("city",list.getCity());
+                hashMap.put("state",list.getState());
+                hashMap.put("zip",list.getZip());
+
+                hashMap.put("phone",list.getPhone());
+                hashMap.put("email",list.getEmail());
+                hashMap.put("store",list.getStore_type());
+
+                dao.update(listName,hashMap);
+
+
+             */
+
+             //   String key = dao.getData().get().getResult().getValue().toString();
+
+            //    Toast.makeText(this,"key: " + key, Toast.LENGTH_LONG).show();
+            //    editText1.setText(key);
              /*
 
                 dao.addRow(list).addOnSuccessListener(suc->{
