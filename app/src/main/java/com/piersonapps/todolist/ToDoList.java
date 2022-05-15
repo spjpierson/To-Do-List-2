@@ -23,6 +23,8 @@ public class ToDoList {
     private String email;
     private String store_type;
 
+    private String key;
+
     public ToDoList(){}
 
     public ToDoList(String list, int index, boolean isHeader, boolean check, String column1, String column2, String column3, String column4,
@@ -171,5 +173,13 @@ public class ToDoList {
 
     public void setStore_type(String store_type) {
         this.store_type = store_type;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }
