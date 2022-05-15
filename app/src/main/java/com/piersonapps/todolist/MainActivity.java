@@ -36,13 +36,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     *
     * */
     //The place the user is inputting the text
+
     EditText main_listInput;
-
-
     Button test_button;
-    //New list added button
+    //New list added button M.P.
     Button button_add;
-
+    //Dialog box for popup Window M.P.
     Dialog mDialog;
 
 
@@ -52,12 +51,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //New list add button - User input
 
-        //creating the ID paths for new list and add button
+        //creating the ID paths for new list and add button M.P.
         main_listInput = (EditText)findViewById(R.id.main_new_list_input);
         button_add = (Button) findViewById(R.id.main_button_add);
-        //onclick listener when input added
+        //onclick listener when input added M.P.
         button_add.setOnClickListener(this);
         mDialog = new Dialog(this);
  
@@ -70,9 +68,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 }
 
-  /*  private void showToast(String main_newList) {
-        Toast.makeText(MainActivity.this, main_newList, Toast.LENGTH_SHORT).show();
-    }*/
+    //  private void showToast(String main_newList) {
+    //     Toast.makeText(MainActivity.this, main_newList, Toast.LENGTH_SHORT).show();
+    // }
 
     public void onClick(View view){
 
@@ -81,8 +79,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
         }
         else if(view.getId() == button_add.getId()){
-           /* main_newList = main_listInput.getText().toString();
-            showToast(main_newList);*/
+            // main_newList = main_listInput.getText().toString();
+            // showToast(main_newList);
+
+            //Popup Window M.P
             mDialog.setContentView(R.layout.newlist);
             mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             mDialog.show();
