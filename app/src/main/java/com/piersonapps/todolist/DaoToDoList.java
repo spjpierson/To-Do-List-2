@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class DaoToDoList {
 
     private DatabaseReference databaseReference;
-
+    private String myKey;
 
     public DaoToDoList(){
         FirebaseDatabase db = FirebaseDatabase.getInstance();
@@ -23,18 +23,17 @@ public class DaoToDoList {
         return databaseReference;
     }
 
-    public Task<Void> addList(String list, ToDoList header){
-        header.setKey(databaseReference.push().getKey());
-        return databaseReference.child(list).setValue(header);
-    }
-
     public Task<Void> addRow(ToDoList row){
-        row.setKey(databaseReference.push().getKey());
-        return databaseReference.child(row.getList()).child(row.getKey()).push().setValue(row);
+        myKey = databaseReference.child(row.getList()).push().getKey();
+        row.setKey(myKey);
+        return databaseReference.child(row.getList()).child(myKey).setValue(row);
     }
 
-    public Task<Void> update(String list, String key ,HashMap<String,Object> hashMap){
-        return databaseReference.child(list).child(key).updateChildren(hashMap);
+
+
+    public Task<Void> update(ToDoList list, String key ,HashMap<String,Object> hashMap){
+
+        return databaseReference.child(list.getList()).child(key).updateChildren(hashMap);
     }
 
     public Task<Void> remove(String list, String key){
@@ -43,5 +42,9 @@ public class DaoToDoList {
 
     public String getKeys() {
         return databaseReference.orderByKey().toString();
+    }
+
+    public String getMyKey() {
+        return myKey;
     }
 }

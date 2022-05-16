@@ -6,18 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Color;
 
 
 import android.os.Bundle;
-import android.os.Debug;
-import android.util.Log;
 import android.util.TypedValue;
 
-import android.view.LayoutInflater;
 import android.view.View;
 
 import android.widget.AdapterView;
@@ -32,17 +28,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-
-import org.json.*;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import io.reactivex.exceptions.Exceptions;
 
 public class QuickViewList extends AppCompatActivity implements View.OnClickListener {
 
@@ -248,7 +239,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
                     hashMap.put("email",toDoLists.get(index).getEmail());
                     hashMap.put("store",toDoLists.get(index).getStore_type());
 
-                    dao.update(toDoLists.get(index).getList(),toDoLists.get(index).getKey(),hashMap);
+                    dao.update(toDoLists.get(index), toDoLists.get(index).getKey(),hashMap);
 
                     index = (saveButtons.size()+1);
 
@@ -377,42 +368,90 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
               toDoLists.add(list);
 
                     dao.addRow(list).addOnSuccessListener(suc->{
-
+                        toDoLists.get(toDoLists.size()-1).setKey(dao.getMyKey());
+                       editText1s.get(checkboxs.size()-1).setText(dao.getMyKey());
                         Toast.makeText(this,"Success",Toast.LENGTH_LONG).show();
+                    /*
+                        int index = 0;
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("list",toDoLists.get(index).getList());
+                        hashMap.put("isHeader",true);
+
+
+
+                        hashMap.put("check",toDoLists.get(index).isCheck());
+                        hashMap.put("index",toDoLists.get(index).getIndex());
+                        toDoLists.get(index).setColumn1(editText1s.get(index).getText().toString());
+                        hashMap.put("column1",toDoLists.get(index).getColumn1());
+                        hashMap.put("column2",toDoLists.get(index).getColumn2());
+                        hashMap.put("column3",toDoLists.get(index).getColumn3());
+                        hashMap.put("column4",toDoLists.get(index).getColumn4());
+
+                        hashMap.put("address1",toDoLists.get(index).getAddress1());
+                        hashMap.put("address2",toDoLists.get(index).getAddress2());
+                        hashMap.put("city",toDoLists.get(index).getCity());
+                        hashMap.put("state",toDoLists.get(index).getState());
+                        hashMap.put("zip",toDoLists.get(index).getZip());
+
+                        hashMap.put("phone",toDoLists.get(index).getPhone());
+                        hashMap.put("email",toDoLists.get(index).getEmail());
+                        hashMap.put("store",toDoLists.get(index).getStore_type());
+
+                        dao.update(toDoLists.get(index), toDoLists.get(index).getKey(),hashMap);
+                    */
+
                     }).addOnFailureListener(err->{
                         Toast.makeText(this,"Fail: " + err.getMessage(),Toast.LENGTH_LONG).show();
                     });
 
-                    editText1s.get(checkboxs.size()-1).setText(list.getKey());
+
             }else if(checkboxs.size() > 1 && checkboxs.size() != 0){
               ToDoList  list = new ToDoList(listName, rowId, false,
                         false, column1,column2,column3,column4,
                         null,null,null,null,0,0,null,null);
                 toDoLists.add(list);
+
+
+
                 dao.addRow(list).addOnSuccessListener(suc->{
 
+                 //   toDoLists.get(toDoLists.size()-1).setKey(dao.getMyKey());
+                   // editText1s.get(checkboxs.size()-1).setText(list.getKey());
                     Toast.makeText(this,"Success",Toast.LENGTH_LONG).show();
+
+                    /*
+                    int index = checkboxs.size()-1;
+                    HashMap<String, Object> hashMap = new HashMap<>();
+                    hashMap.put("list",toDoLists.get(index).getList());
+                    hashMap.put("isHeader",true);
+
+
+
+                    hashMap.put("check",toDoLists.get(index).isCheck());
+                    hashMap.put("index",toDoLists.get(index).getIndex());
+                    toDoLists.get(index).setColumn1(editText1s.get(index).getText().toString());
+                    hashMap.put("column1",toDoLists.get(index).getColumn1());
+                    hashMap.put("column2",toDoLists.get(index).getColumn2());
+                    hashMap.put("column3",toDoLists.get(index).getColumn3());
+                    hashMap.put("column4",toDoLists.get(index).getColumn4());
+
+                    hashMap.put("address1",toDoLists.get(index).getAddress1());
+                    hashMap.put("address2",toDoLists.get(index).getAddress2());
+                    hashMap.put("city",toDoLists.get(index).getCity());
+                    hashMap.put("state",toDoLists.get(index).getState());
+                    hashMap.put("zip",toDoLists.get(index).getZip());
+
+                    hashMap.put("phone",toDoLists.get(index).getPhone());
+                    hashMap.put("email",toDoLists.get(index).getEmail());
+                    hashMap.put("store",toDoLists.get(index).getStore_type());
+
+                    dao.update(toDoLists.get(index), toDoLists.get(index).getKey(),hashMap);
+                */
                 }).addOnFailureListener(err->{
                     Toast.makeText(this,"Fail: " + err.getMessage(),Toast.LENGTH_LONG).show();
                 });
 
-            /*
 
-
-
-             */
-
-             //   String key = dao.getData().get().getResult().getValue().toString();
-
-            //    Toast.makeText(this,"key: " + key, Toast.LENGTH_LONG).show();
-            //    editText1.setText(key);
-             /*
-
-                dao.addRow(list).addOnSuccessListener(suc->{
-                    Toast.makeText(this,"Success",Toast.LENGTH_LONG).show();
-                }).addOnFailureListener(err->{
-                    Toast.makeText(this,"Fail: " + err.getMessage(),Toast.LENGTH_LONG).show();
-                }); */
 
                 Toast.makeText(this,"Not first row",Toast.LENGTH_LONG).show();
             }
