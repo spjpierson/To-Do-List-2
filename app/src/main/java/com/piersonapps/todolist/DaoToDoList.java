@@ -3,6 +3,7 @@ package com.piersonapps.todolist;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 
 import java.util.HashMap;
@@ -26,10 +27,9 @@ public class DaoToDoList {
     public Task<Void> addRow(ToDoList row){
         myKey = databaseReference.child(row.getList()).push().getKey();
         row.setKey(myKey);
+
         return databaseReference.child(row.getList()).child(myKey).setValue(row);
     }
-
-
 
     public Task<Void> update(ToDoList list, String key ,HashMap<String,Object> hashMap){
 
@@ -40,8 +40,8 @@ public class DaoToDoList {
         return databaseReference.child(list).child(key).removeValue();
     }
 
-    public String getKeys() {
-        return databaseReference.orderByKey().toString();
+    public Query getKeys() {
+        return databaseReference.orderByValue();
     }
 
     public String getMyKey() {

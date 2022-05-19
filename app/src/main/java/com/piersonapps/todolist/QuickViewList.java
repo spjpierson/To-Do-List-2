@@ -30,10 +30,17 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.JsonObject;
+
+import org.json.*;
 
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Spliterator;
 
 public class QuickViewList extends AppCompatActivity implements View.OnClickListener {
 
@@ -61,9 +68,11 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
    private ArrayList<ToDoList> toDoLists;
 
-    DaoToDoList dao;
+   private DaoToDoList dao;
 
-    String info;
+   private String info;
+
+ private ArrayAdapter<String> spinnerListArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +81,29 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
         rowIndexing = new ArrayList<Integer>();
 
+
+        dao = new DaoToDoList();
+
         lists = new ArrayList<String>();
-        lists.add("Add New List");
+
+
+        dao.getDatabaseReference().get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+
+
+
+                task.getResult().getChildren().iterator();
+                for(DataSnapshot child: task.getResult().getChildren()){
+                    lists.add(child.getKey());
+                }
+                lists.add("Add New List");
+
+            }
+        });
+
+
+        lists.add("Please Select Your List Or Create a New One");
 
         addRowButton = findViewById(R.id.quick_view_add_row_button);
         container = findViewById(R.id.quick_view_layout_container);
@@ -93,10 +123,10 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
         listsSpinner = findViewById(R.id.quick_view_lists_spinner);
 
-        dao = new DaoToDoList();
 
-        ArrayAdapter<String> spinnerListArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, lists);
 
+        spinnerListArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, lists);
+        spinnerListArrayAdapter.notifyDataSetChanged();
         listsSpinner.setAdapter(spinnerListArrayAdapter);
 
 
@@ -104,8 +134,8 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
         listsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(adapterView.getSelectedItem().toString().equals("Add New List")){
+           public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+               if(adapterView.getSelectedItem().toString().equals("Add New List")){
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(QuickViewList.this);
                     alertDialog.setTitle("List");
                     alertDialog.setMessage("Please Enter In the new List Below");
@@ -152,6 +182,8 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
             }
         });
 
+
+
 /*
         dao.getDatabaseReference().addValueEventListener(new ValueEventListener() {
             @Override
@@ -159,7 +191,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
              if(editText1s.size() != 0) {
-                 info =  dataSnapshot.child(listsSpinner.getSelectedItem().toString()).getValue().toString();
+                 info =  dataSnapshot.getChildren().toString();
 
 
                      editText1s.get(0).setText(info);
@@ -177,7 +209,8 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
              //   Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
-*/
+
+            */
 
     }
 
@@ -213,17 +246,19 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
                     editText3s.get(index).setEnabled(false);
                     editText4s.get(index).setEnabled(false);
 
+                    toDoLists.get(index).setCheck(checkboxs.get(index).isChecked());
+
+                    toDoLists.get(index).setColumn1(editText1s.get(index).getText().toString());
+                    toDoLists.get(index).setColumn2(editText2s.get(index).getText().toString());
+                    toDoLists.get(index).setColumn3(editText3s.get(index).getText().toString());
+                    toDoLists.get(index).setColumn4(editText4s.get(index).getText().toString());
 
 
                     HashMap<String, Object> hashMap = new HashMap<>();
                     hashMap.put("list",toDoLists.get(index).getList());
-                    hashMap.put("isHeader",false);
-
-
-
                     hashMap.put("check",toDoLists.get(index).isCheck());
                     hashMap.put("index",toDoLists.get(index).getIndex());
-                    toDoLists.get(index).setColumn1(editText1s.get(index).getText().toString());
+
                     hashMap.put("column1",toDoLists.get(index).getColumn1());
                     hashMap.put("column2",toDoLists.get(index).getColumn2());
                     hashMap.put("column3",toDoLists.get(index).getColumn3());
@@ -253,7 +288,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
     }
 
-        private void addRowLayout(String listName){
+    private void addRowLayout(String listName){
             LinearLayout row = new LinearLayout(this.getApplicationContext());
             row.setOrientation(LinearLayout.HORIZONTAL);
             row.setBackgroundColor(Color.BLACK);
@@ -368,37 +403,8 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
               toDoLists.add(list);
 
                     dao.addRow(list).addOnSuccessListener(suc->{
-                        toDoLists.get(toDoLists.size()-1).setKey(dao.getMyKey());
-                       editText1s.get(checkboxs.size()-1).setText(dao.getMyKey());
+
                         Toast.makeText(this,"Success",Toast.LENGTH_LONG).show();
-                    /*
-                        int index = 0;
-                        HashMap<String, Object> hashMap = new HashMap<>();
-                        hashMap.put("list",toDoLists.get(index).getList());
-                        hashMap.put("isHeader",true);
-
-
-
-                        hashMap.put("check",toDoLists.get(index).isCheck());
-                        hashMap.put("index",toDoLists.get(index).getIndex());
-                        toDoLists.get(index).setColumn1(editText1s.get(index).getText().toString());
-                        hashMap.put("column1",toDoLists.get(index).getColumn1());
-                        hashMap.put("column2",toDoLists.get(index).getColumn2());
-                        hashMap.put("column3",toDoLists.get(index).getColumn3());
-                        hashMap.put("column4",toDoLists.get(index).getColumn4());
-
-                        hashMap.put("address1",toDoLists.get(index).getAddress1());
-                        hashMap.put("address2",toDoLists.get(index).getAddress2());
-                        hashMap.put("city",toDoLists.get(index).getCity());
-                        hashMap.put("state",toDoLists.get(index).getState());
-                        hashMap.put("zip",toDoLists.get(index).getZip());
-
-                        hashMap.put("phone",toDoLists.get(index).getPhone());
-                        hashMap.put("email",toDoLists.get(index).getEmail());
-                        hashMap.put("store",toDoLists.get(index).getStore_type());
-
-                        dao.update(toDoLists.get(index), toDoLists.get(index).getKey(),hashMap);
-                    */
 
                     }).addOnFailureListener(err->{
                         Toast.makeText(this,"Fail: " + err.getMessage(),Toast.LENGTH_LONG).show();
@@ -415,38 +421,9 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
                 dao.addRow(list).addOnSuccessListener(suc->{
 
-                 //   toDoLists.get(toDoLists.size()-1).setKey(dao.getMyKey());
-                   // editText1s.get(checkboxs.size()-1).setText(list.getKey());
                     Toast.makeText(this,"Success",Toast.LENGTH_LONG).show();
 
-                    /*
-                    int index = checkboxs.size()-1;
-                    HashMap<String, Object> hashMap = new HashMap<>();
-                    hashMap.put("list",toDoLists.get(index).getList());
-                    hashMap.put("isHeader",true);
 
-
-
-                    hashMap.put("check",toDoLists.get(index).isCheck());
-                    hashMap.put("index",toDoLists.get(index).getIndex());
-                    toDoLists.get(index).setColumn1(editText1s.get(index).getText().toString());
-                    hashMap.put("column1",toDoLists.get(index).getColumn1());
-                    hashMap.put("column2",toDoLists.get(index).getColumn2());
-                    hashMap.put("column3",toDoLists.get(index).getColumn3());
-                    hashMap.put("column4",toDoLists.get(index).getColumn4());
-
-                    hashMap.put("address1",toDoLists.get(index).getAddress1());
-                    hashMap.put("address2",toDoLists.get(index).getAddress2());
-                    hashMap.put("city",toDoLists.get(index).getCity());
-                    hashMap.put("state",toDoLists.get(index).getState());
-                    hashMap.put("zip",toDoLists.get(index).getZip());
-
-                    hashMap.put("phone",toDoLists.get(index).getPhone());
-                    hashMap.put("email",toDoLists.get(index).getEmail());
-                    hashMap.put("store",toDoLists.get(index).getStore_type());
-
-                    dao.update(toDoLists.get(index), toDoLists.get(index).getKey(),hashMap);
-                */
                 }).addOnFailureListener(err->{
                     Toast.makeText(this,"Fail: " + err.getMessage(),Toast.LENGTH_LONG).show();
                 });
