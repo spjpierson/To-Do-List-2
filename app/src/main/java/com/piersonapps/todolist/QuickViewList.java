@@ -301,20 +301,41 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
 
 
-/*
+
         dao.getDatabaseReference().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-             if(editText1s.size() != 0) {
-                 info =  dataSnapshot.getChildren().toString();
+             if(checkboxs.size() > 0) {
 
 
-                     editText1s.get(0).setText(info);
+                int index = 0;
+                String list = listsSpinner.getSelectedItem().toString();
+                 dataSnapshot.child(list).getChildren().iterator();
+                 for(DataSnapshot child: dataSnapshot.child(list).getChildren()){
+
+                    String in =  child.child("index").getValue().toString();
+
+                    try{
+                        index = Integer.parseInt(in);
+
+                        if(child.child("check").getValue().toString().equals("true")){
+                            checkboxs.get(index).setChecked(true);
+                        }else if(child.child("check").getValue().toString().equals("false")){
+                            checkboxs.get(index).setChecked(false);
+                        }
+
+                        editText1s.get(index).setText(child.child("column1").getValue().toString());
+                        editText2s.get(index).setText(child.child("column2").getValue().toString());
+                        editText3s.get(index).setText(child.child("column3").getValue().toString());
+                        editText4s.get(index).setText(child.child("column4").getValue().toString());
+                    }catch (Exception e){
+                        Toast.makeText(getApplicationContext(),"Sorry Something went wrong you might what to reselect the list",Toast.LENGTH_SHORT).show();
+                    }
 
 
-
+                 }
 
 
                 }
@@ -327,7 +348,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
             }
         });
 
-            */
+
 
 
     }
