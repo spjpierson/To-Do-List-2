@@ -16,6 +16,7 @@ import android.util.TypedValue;
 
 import android.view.View;
 
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -73,10 +74,13 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
    private DaoToDoList dao;
 
    private Button searchButton;
+   private EditText searchInput;
 
    private ArrayAdapter<String> spinnerListArrayAdapter;
 
    private ArrayAdapter<String> spinnerSearchFieldsArrayAdapter;
+
+   private String selectField = "Select Field";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +115,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
         addRowButton = findViewById(R.id.quick_view_add_row_button);
         container = findViewById(R.id.quick_view_layout_container);
+        searchInput = findViewById(R.id.quick_view_search_input);
 
         searchFields = new ArrayList<String>();
 
@@ -130,7 +135,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
         listsSpinner = findViewById(R.id.quick_view_lists_spinner);
         searchFieldsSpinner = findViewById(R.id.quick_view_field_spinner);
 
-        searchFields.add("fields");
+        searchFields.add(selectField);
 
         spinnerListArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, lists);
         spinnerListArrayAdapter.notifyDataSetChanged();
@@ -144,6 +149,25 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
         addRowButton.setOnClickListener(this);
         searchButton.setOnClickListener(this);
+
+        searchFieldsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(adapterView.getSelectedItem().toString().equals(selectField)){
+                    if(checkboxs.size() > 0){
+                        for(int j = 0; j <= checkboxs.size()-1; ++j){
+                            addRowLayoutWithSearch(j);
+                            searchInput.setText("");
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         listsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -237,7 +261,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
                                        spinnerSearchFieldsArrayAdapter.clear();
 
                                        searchFields = new ArrayList<>();
-                                       searchFields.add(0,"fields");
+                                       searchFields.add(0,selectField);
                                        searchFields.add( 1,list.getColumn1());
                                        searchFields.add( 2,list.getColumn2());
                                        searchFields.add( 3,list.getColumn3());
@@ -315,7 +339,68 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
         if(view.getId() == addRowButton.getId()){
             addRowLayout(listsSpinner.getSelectedItem().toString(),true);
         }else if(view.getId() == searchButton.getId()){
-            //Things to do
+
+             if(checkboxs.size() != 0){
+                 container.removeAllViews();
+                 addRowLayoutWithSearch(0);
+
+                 String chosenColumn = searchFieldsSpinner.getSelectedItem().toString();
+
+                 int searchColumn = 0;
+
+                 if(editText1s.get(0).getText().toString().equals(chosenColumn)){
+                     searchColumn = 1;
+
+                 } else if(editText2s.get(0).getText().toString().equals(chosenColumn)){
+                     searchColumn = 2;
+                 } else if(editText3s.get(0).getText().toString().equals(chosenColumn)){
+                     searchColumn = 3;
+                 }else if(editText4s.get(0).getText().toString().equals(chosenColumn)){
+                     searchColumn = 4;
+                 }
+
+
+
+                 if(searchColumn == 1){
+
+                     for(int i = 1; i <= checkboxs.size()-1; ++i){
+                         if(editText1s.get(i).getText().toString().contains(searchInput.getText().toString())){
+                             addRowLayoutWithSearch(i);
+
+                         }
+                     }
+
+                 }else if(searchColumn == 2){
+
+                     for(int i = 1; i <= checkboxs.size()-1; ++i){
+                         if(editText2s.get(i).getText().toString().contains(searchInput.getText().toString())){
+                             addRowLayoutWithSearch(i);
+
+                         }
+                     }
+
+                 }else if(searchColumn == 3){
+
+                     for(int i = 1; i <= checkboxs.size()-1; ++i){
+                         if(editText3s.get(i).getText().toString().contains(searchInput.getText().toString())){
+                             addRowLayoutWithSearch(i);
+
+                         }
+                     }
+
+                 }else if(searchColumn == 4){
+
+                     for(int i = 1; i <= checkboxs.size()-1; ++i){
+                         if(editText4s.get(i).getText().toString().contains(searchInput.getText().toString())){
+                             addRowLayoutWithSearch(i);
+
+                         }
+                     }
+
+                 }
+
+
+             }
         }else{
             int index = 0;
 
@@ -382,6 +467,59 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
         }
 
+    }
+
+    private void addRowLayoutWithSearch(int index){
+
+
+        LinearLayout row = new LinearLayout(getApplicationContext());
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setBackgroundColor(Color.BLACK);
+        row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+
+        Resources r = this.getResources();
+
+
+        int dp = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                1,
+                r.getDisplayMetrics()
+        );
+
+        LayoutParams params1Weight = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT,1);
+        params1Weight.setMargins(dp,dp,dp,dp);
+
+        LayoutParams params2Weight = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT,2);
+        params2Weight.setMargins(dp,dp,dp,dp);
+
+        LayoutParams params5Weight = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT,5);
+        params5Weight.setMargins(dp,dp,dp,dp);
+
+        ((ViewGroup)checkboxs.get(index).getParent()).removeView(checkboxs.get(index));
+        row.addView(checkboxs.get(index));
+
+        ((ViewGroup)editText1s.get(index).getParent()).removeView(editText1s.get(index));
+        row.addView(editText1s.get(index));
+
+        ((ViewGroup)editText2s.get(index).getParent()).removeView(editText2s.get(index));
+        row.addView(editText2s.get(index));
+
+        ((ViewGroup)editText3s.get(index).getParent()).removeView(editText3s.get(index));
+        row.addView(editText3s.get(index));
+
+        ((ViewGroup)editText4s.get(index).getParent()).removeView(editText4s.get(index));
+        row.addView(editText4s.get(index));
+
+
+        ((ViewGroup)editButtons.get(index).getParent()).removeView(editButtons.get(index));
+        row.addView(editButtons.get(index));
+
+        ((ViewGroup)saveButtons.get(index).getParent()).removeView(saveButtons.get(index));
+        row.addView(saveButtons.get(index));
+
+
+
+       container.addView(row);
     }
 
     private void addRowLayout(String listName, boolean newRow){
