@@ -15,4 +15,9 @@
     <string name="Home">Home Improvement</string>
     <string name="submit">Submit</string>
     <string name="cancel">Cancel</string>
+
+    <string name="column_1">Column 1</string>
+    <string name="column_2">Column 2</string>
+    <string name="column_3">Column 3</string>
+    <string name="column_4">Column 4</string>
 </resources>
