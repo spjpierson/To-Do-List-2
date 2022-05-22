@@ -68,19 +68,33 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/button2"
+            <ImageButton
+                android:id="@+id/quick_view_set_alarm_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="set alarm" />
+                android:src="@android:drawable/ic_menu_my_calendar" />
 
-            <Button
+            <ImageButton
+                android:id="@+id/quick_view_edit_all_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@android:drawable/ic_menu_edit" />
+
+            <ImageButton
+                android:id="@+id/quickview_save_all_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@android:drawable/ic_menu_save" />
+
+            <ImageButton
                 android:id="@+id/quick_view_add_row_button"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Add Row" />
+                android:src="@android:drawable/ic_menu_add" />
         </LinearLayout>
 
     </LinearLayout>

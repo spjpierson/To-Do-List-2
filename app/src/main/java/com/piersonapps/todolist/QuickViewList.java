@@ -46,7 +46,9 @@ import java.util.Objects;
 
 public class QuickViewList extends AppCompatActivity implements View.OnClickListener {
 
-    private Button addRowButton;
+    private ImageButton addRowButton;
+    private ImageButton editAllButton;
+    private ImageButton saveAllButton;
     private LinearLayout container;
 
     private ArrayList<String> searchFields;
@@ -63,19 +65,18 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
     private ArrayList<String> lists;
 
 
-
     private Spinner listsSpinner;
     private Spinner searchFieldsSpinner;
 
     private int rowId = 0;
     private int rowSaveButtonId = 999999999;
 
-   private ArrayList<ToDoList> toDoLists;
+    private ArrayList<ToDoList> toDoLists;
 
-   private DaoToDoList dao;
+    private DaoToDoList dao;
 
-   private Button searchButton;
-   private EditText searchInput;
+    private Button searchButton;
+    private EditText searchInput;
 
    ArrayAdapter<String> spinnerListArrayAdapter;
 
@@ -83,7 +84,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
    private final String selectField = "Select Field";
 
-    private int screenWidth;
+   private int screenWidth;
 
 
     private int columnWidth;
@@ -118,6 +119,10 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
         lists.add("Please Select Your List Or Create a New One");
 
         addRowButton = findViewById(R.id.quick_view_add_row_button);
+        saveAllButton = findViewById(R.id.quickview_save_all_button);
+        editAllButton = findViewById(R.id.quick_view_edit_all_button);
+
+
         container = findViewById(R.id.quick_view_layout_container);
         searchInput = findViewById(R.id.quick_view_search_input);
 
@@ -153,6 +158,8 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
         addRowButton.setOnClickListener(this);
         searchButton.setOnClickListener(this);
+        editAllButton.setOnClickListener(this);
+        saveAllButton.setOnClickListener(this);
 
         searchFieldsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -365,7 +372,79 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
 
-        if(view.getId() == addRowButton.getId()){
+        if(editAllButton.getId() == view.getId()){
+
+         if(checkboxes.size() > 0) {
+             int i = 0;
+             do {
+                 editText1s.get(i).setEnabled(true);
+                 editText2s.get(i).setEnabled(true);
+                 editText3s.get(i).setEnabled(true);
+                 editText4s.get(i).setEnabled(true);
+                 i += 1;
+             } while (i < checkboxes.size());
+         }
+
+        }else if(saveAllButton.getId() == view.getId()){
+            if(checkboxes.size() > 0) {
+                int i = 0;
+                do {
+                    editText1s.get(i).setEnabled(false);
+                    editText2s.get(i).setEnabled(false);
+                    editText3s.get(i).setEnabled(false);
+                    editText4s.get(i).setEnabled(false);
+
+                    toDoLists.get(i).setCheck(checkboxes.get(i).isChecked());
+
+                    toDoLists.get(i).setColumn1(editText1s.get(i).getText().toString());
+                    toDoLists.get(i).setColumn2(editText2s.get(i).getText().toString());
+                    toDoLists.get(i).setColumn3(editText3s.get(i).getText().toString());
+                    toDoLists.get(i).setColumn4(editText4s.get(i).getText().toString());
+
+
+                    HashMap<String, Object> hashMap = new HashMap<>();
+                    hashMap.put("list", toDoLists.get(i).getList());
+                    hashMap.put("check", toDoLists.get(i).isCheck());
+                    hashMap.put("index", toDoLists.get(i).getIndex());
+
+                    hashMap.put("column1", toDoLists.get(i).getColumn1());
+                    hashMap.put("column2", toDoLists.get(i).getColumn2());
+                    hashMap.put("column3", toDoLists.get(i).getColumn3());
+                    hashMap.put("column4", toDoLists.get(i).getColumn4());
+
+                    hashMap.put("address1", toDoLists.get(i).getAddress1());
+                    hashMap.put("address2", toDoLists.get(i).getAddress2());
+                    hashMap.put("city", toDoLists.get(i).getCity());
+                    hashMap.put("state", toDoLists.get(i).getState());
+                    hashMap.put("zip", toDoLists.get(i).getZip());
+
+                    hashMap.put("phone", toDoLists.get(i).getPhone());
+                    hashMap.put("email", toDoLists.get(i).getEmail());
+                    hashMap.put("store", toDoLists.get(i).getStore_type());
+
+                    dao.update(toDoLists.get(i), toDoLists.get(i).getKey(), hashMap);
+
+
+                    if (i == 0) {
+                        spinnerSearchFieldsArrayAdapter.clear();
+
+                        searchFields = new ArrayList<>();
+                        searchFields.add(0, selectField);
+                        searchFields.add(1, editText1s.get(0).getText().toString());
+                        searchFields.add(2, editText2s.get(0).getText().toString());
+                        searchFields.add(3, editText3s.get(0).getText().toString());
+                        searchFields.add(4, editText4s.get(0).getText().toString());
+
+                        spinnerSearchFieldsArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, searchFields);
+                        spinnerSearchFieldsArrayAdapter.notifyDataSetChanged();
+                        searchFieldsSpinner.setAdapter(spinnerSearchFieldsArrayAdapter);
+                    }
+
+                    i += 1;
+                } while (i < checkboxes.size());
+            }
+
+        } else if(view.getId() == addRowButton.getId()){
             addRowLayout(listsSpinner.getSelectedItem().toString(),true);
         }else if(view.getId() == searchButton.getId()){
 
@@ -430,7 +509,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
 
              }
-        }else{
+        } else{
             int index = 0;
 
             do {
@@ -721,9 +800,6 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
                 dao.addRow(list).addOnSuccessListener(suc-> Toast.makeText(this,"Success",Toast.LENGTH_LONG).show()).addOnFailureListener(err-> Toast.makeText(this,"Fail: " + err.getMessage(),Toast.LENGTH_LONG).show());
 
-
-
-                Toast.makeText(this,"Not first row",Toast.LENGTH_LONG).show();
             }
 
 
