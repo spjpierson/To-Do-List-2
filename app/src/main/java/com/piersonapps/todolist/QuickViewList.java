@@ -8,10 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
-
-
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -33,6 +32,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -49,6 +49,10 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
     private ImageButton addRowButton;
     private ImageButton editAllButton;
     private ImageButton saveAllButton;
+    private ImageButton deleteRowButton;
+    private ImageButton alaramButton;
+
+
     private LinearLayout container;
 
     private ArrayList<String> searchFields;
@@ -59,9 +63,11 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
     private ArrayList<EditText> editText3s;
     private ArrayList<EditText> editText4s;
 
+
+
     private ArrayList<ImageButton> editButtons;
     private ArrayList<ImageButton> saveButtons;
-    
+
     private ArrayList<String> lists;
 
 
@@ -122,6 +128,9 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
         saveAllButton = findViewById(R.id.quickview_save_all_button);
         editAllButton = findViewById(R.id.quick_view_edit_all_button);
 
+        deleteRowButton = findViewById(R.id.quick_view_delete_button);
+        alaramButton = findViewById(R.id.quick_view_set_alarm_button);
+
 
         container = findViewById(R.id.quick_view_layout_container);
         searchInput = findViewById(R.id.quick_view_search_input);
@@ -160,6 +169,10 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
         searchButton.setOnClickListener(this);
         editAllButton.setOnClickListener(this);
         saveAllButton.setOnClickListener(this);
+        alaramButton.setOnClickListener(this);
+        deleteRowButton.setOnClickListener(this);
+
+
 
         searchFieldsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -372,7 +385,12 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
 
-        if(editAllButton.getId() == view.getId()){
+        if(alaramButton.getId() == view.getId()){
+            Intent calendarActivity = new Intent(this,CalendarActivity.class);
+            startActivity(calendarActivity);
+        }else if(deleteRowButton.getId() == view.getId()){
+            Toast.makeText(getApplicationContext(),"Delete Button was press",Toast.LENGTH_SHORT).show();
+        } else if(editAllButton.getId() == view.getId()){
 
          if(checkboxes.size() > 0) {
              int i = 0;

@@ -69,6 +69,13 @@
             android:orientation="horizontal">
 
             <ImageButton
+                android:id="@+id/quick_view_delete_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@android:drawable/ic_input_delete" />
+
+            <ImageButton
                 android:id="@+id/quick_view_set_alarm_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
