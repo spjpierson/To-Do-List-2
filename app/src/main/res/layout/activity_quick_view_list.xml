@@ -45,10 +45,24 @@
 
         </LinearLayout>
 
-        <Spinner
-            android:id="@+id/quick_view_lists_spinner"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/quick_view_lists_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="100" />
+
+            <ImageButton
+                android:id="@+id/quick_view_delete_list_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:srcCompat="@android:drawable/ic_menu_delete" />
+        </LinearLayout>
 
         <ScrollView
             android:layout_width="match_parent"

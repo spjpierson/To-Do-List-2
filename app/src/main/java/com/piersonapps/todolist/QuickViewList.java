@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -29,10 +31,9 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Spinner;
 
+import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -51,6 +52,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
     private ImageButton saveAllButton;
     private ImageButton deleteRowButton;
     private ImageButton alaramButton;
+    private ImageButton deleteListButton;
 
 
     private LinearLayout container;
@@ -108,7 +110,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
         lists = new ArrayList<>();
 
-
+        // grab current database list
         dao.getDatabaseReference().get().addOnCompleteListener(task -> {
 
 
@@ -117,11 +119,12 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
                 lists.add(child.getKey());
 
             }
+            // to allow user to add new database
             lists.add("Add New List");
 
         });
 
-
+        //null
         lists.add("Please Select Your List Or Create a New One");
 
         addRowButton = findViewById(R.id.quick_view_add_row_button);
@@ -129,6 +132,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
         editAllButton = findViewById(R.id.quick_view_edit_all_button);
 
         deleteRowButton = findViewById(R.id.quick_view_delete_button);
+        deleteListButton = findViewById(R.id.quick_view_delete_list_button);
         alaramButton = findViewById(R.id.quick_view_set_alarm_button);
 
 
@@ -171,7 +175,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
         saveAllButton.setOnClickListener(this);
         alaramButton.setOnClickListener(this);
         deleteRowButton.setOnClickListener(this);
-
+        deleteListButton.setOnClickListener(this);
 
 
         searchFieldsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -200,7 +204,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(QuickViewList.this);
                     alertDialog.setTitle("List");
                     alertDialog.setMessage("Please Enter In the new List Below");
-
+                //popup
                     EditText input = new EditText(QuickViewList.this);
                     input.setHint("List Name");
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -386,10 +390,159 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
 
         if(alaramButton.getId() == view.getId()){
+            // Intent get an activity content
             Intent calendarActivity = new Intent(this,CalendarActivity.class);
+            //start an activity
             startActivity(calendarActivity);
-        }else if(deleteRowButton.getId() == view.getId()){
-            Toast.makeText(getApplicationContext(),"Delete Button was press",Toast.LENGTH_SHORT).show();
+        }else if(deleteListButton.getId() == view.getId()){
+
+           /* !listsSpinner.getSelectedItem().equals("Add New List")
+                    && !listsSpinner.getSelectedItem().equals("Please Select Your List Or Create a New One")
+
+            */
+
+        if(!listsSpinner.getSelectedItem().equals("Add New List") && !listsSpinner.getSelectedItem().equals("Please Select Your List Or Create a New One")) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(QuickViewList.this);
+            builder.setMessage("ARE YOUR SURE YOU WANT TO DELETE " + listsSpinner.getSelectedItem().toString() + "?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                    dao.deleteList(listsSpinner.getSelectedItem().toString());
+                    lists.remove(listsSpinner.getSelectedItem().toString());
+                    listsSpinner.setSelection(0);
+                    container.removeAllViews();
+
+                }
+            });
+
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            });
+
+            builder.show();
+        }
+
+        } else if(deleteRowButton.getId() == view.getId()){
+
+
+            if(checkboxes.size() > 0){
+                AlertDialog.Builder builder = new AlertDialog.Builder(QuickViewList.this);
+                builder.setMessage("ARE YOUR SURE YOU WANT TO DELETE ALL CHECK ROWS?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        for(int j = 0; j < toDoLists.size(); ++j){
+                            if(checkboxes.get(j).isChecked()){
+                                dao.remove(toDoLists.get(j).getList(),toDoLists.get(j).getKey());
+                            }
+                        }
+
+
+                        dao.getDatabaseReference().child(listsSpinner.getSelectedItem().toString()).get().addOnCompleteListener(task -> {
+
+                            container.removeAllViews();
+
+                            checkboxes = new ArrayList<>();
+
+                            editText1s = new ArrayList<>();
+                            editText2s = new ArrayList<>();
+                            editText3s = new ArrayList<>();
+                            editText4s = new ArrayList<>();
+
+                            editButtons = new ArrayList<>();
+                            saveButtons = new ArrayList<>();
+
+
+                            toDoLists = new ArrayList<>();
+
+                            rowId = 0;
+                            rowSaveButtonId = 999999999;
+
+                            int i12 = 0;
+                            task.getResult().getChildren().iterator();
+                            for(DataSnapshot child: task.getResult().getChildren()) {
+
+
+                                ToDoList list = new ToDoList();
+
+                                list.setList(listsSpinner.getSelectedItem().toString());
+                                list.setIndex(rowId);
+                                list.setHeader(Boolean.getBoolean(Objects.requireNonNull(child.child("header").getValue()).toString()));
+
+                                if(Objects.requireNonNull(child.child("check").getValue()).toString().equals("true")) {
+                                    list.setCheck(true);
+                                }else if(Objects.requireNonNull(child.child("check").getValue()).toString().equals("false")){
+                                    list.setCheck(false);
+                                }
+
+                                list.setColumn1(Objects.requireNonNull(child.child("column1").getValue()).toString());
+                                list.setColumn2(Objects.requireNonNull(child.child("column2").getValue()).toString());
+                                list.setColumn3(Objects.requireNonNull(child.child("column3").getValue()).toString());
+                                list.setColumn4(Objects.requireNonNull(child.child("column4").getValue()).toString());
+                                list.setKey(child.getKey());
+                                toDoLists.add(list);
+
+
+                                if(i12 == 0){
+
+
+
+                                    spinnerSearchFieldsArrayAdapter.clear();
+
+                                    searchFields = new ArrayList<>();
+                                    searchFields.add(0,selectField);
+                                    searchFields.add( 1,list.getColumn1());
+                                    searchFields.add( 2,list.getColumn2());
+                                    searchFields.add( 3,list.getColumn3());
+                                    searchFields.add( 4,list.getColumn4());
+
+                                    spinnerSearchFieldsArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item,searchFields);
+                                    spinnerSearchFieldsArrayAdapter.notifyDataSetChanged();
+                                    searchFieldsSpinner.setAdapter(spinnerSearchFieldsArrayAdapter);
+
+
+                                }
+
+                                addRowLayout(listsSpinner.getSelectedItem().toString(),false);
+
+                                checkboxes.get(i12).setChecked(list.isCheck());
+                                editText1s.get(i12).setText(list.getColumn1());
+                                editText2s.get(i12).setText(list.getColumn2());
+                                editText3s.get(i12).setText(list.getColumn3());
+                                editText4s.get(i12).setText(list.getColumn4());
+                                i12++;
+                            }
+
+
+
+                        });
+
+
+
+
+
+                    }
+
+
+
+
+                });
+
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                    }
+                });
+
+                builder.show();
+
+            }
+
         } else if(editAllButton.getId() == view.getId()){
 
          if(checkboxes.size() > 0) {

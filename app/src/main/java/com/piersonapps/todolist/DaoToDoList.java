@@ -36,6 +36,10 @@ public class DaoToDoList {
         return databaseReference.child(list.getList()).child(key).updateChildren(hashMap);
     }
 
+    public Task<Void> deleteList(String list){
+        return databaseReference.child(list).removeValue();
+    }
+
     public Task<Void> remove(String list, String key){
         return databaseReference.child(list).child(key).removeValue();
     }
