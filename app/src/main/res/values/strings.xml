@@ -20,4 +20,18 @@
     <string name="column_2">Column 2</string>
     <string name="column_3">Column 3</string>
     <string name="column_4">Column 4</string>
+    <string name="title_activity_login">LoginActivity</string>
+
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_login">Login</string>
+    <string name="action_re_enter_password">Re-Enter Password</string>
+    <string name="action_register">Register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_create_a_new_account">Create A New Account</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="user_name">Name</string>
 </resources>

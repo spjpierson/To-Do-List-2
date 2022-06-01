@@ -103,9 +103,6 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quick_view_list);
 
-
-
-
         dao = new DaoToDoList();
 
         lists = new ArrayList<>();
