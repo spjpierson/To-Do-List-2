@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,6 +28,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText nameInputText;
     private Button loginButton;
     private Button newAccountButton;
+    private int attemps;
 
 
     @Override
@@ -34,6 +36,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        attemps = 0;
         viewState = "LOGIN_STATE";
         headerDisplay = findViewById(R.id.login_header_display_text);
         emailInputText = findViewById(R.id.login_email_input);
@@ -57,21 +60,52 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
                     FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password).addOnCompleteListener(task -> {
-                        FirebaseUser firebaseUser;
-                        firebaseUser = task.getResult().getUser();
+                      if(task.isSuccessful()) {
+                          FirebaseUser firebaseUser;
+                          firebaseUser = task.getResult().getUser();
 
-                        Intent intent = new Intent(getApplicationContext(),QuickViewList.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                          Intent intent = new Intent(getApplicationContext(), QuickViewList.class);
+                          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                        intent.putExtra("user_id",firebaseUser.getUid());
-                        intent.putExtra("email_id",firebaseUser.getEmail());
-                        intent.putExtra("name_id",firebaseUser.getDisplayName());
+                          intent.putExtra("user_id", firebaseUser.getUid());
+                          intent.putExtra("email_id", firebaseUser.getEmail());
+                          intent.putExtra("name_id", firebaseUser.getDisplayName());
 
-                        startActivity(intent);
-                        finish();
+                          startActivity(intent);
+                          finish();
+                      }else{
+                          if(task.getException().toString().contains("password") && attemps < 3){
+                              attemps += 1;
+                              Toast.makeText(getApplicationContext(),"Your password is incorrect. Attempts: "+attemps,Toast.LENGTH_LONG).show();
+
+                          }else if(task.getException().toString().contains("password") && attemps > 2 ){
+                              viewState = "RESET_PASSWORD";
+                              passwordInputText.setVisibility(View.INVISIBLE);
+                              newAccountButton.setVisibility(View.INVISIBLE);
+                              loginButton.setText("REST PASSWORD");
+                              headerDisplay.setText("REST PASSWORD");
+                          }
+                      }
+
                     });
                 }
 
+            }else if(viewState.equals("RESET_PASSWORD")){
+                String email = emailInputText.getText().toString();
+                if(!TextUtils.isEmpty(email)){
+                    FirebaseAuth auth = FirebaseAuth.getInstance();
+                    auth.sendPasswordResetEmail(email).addOnCompleteListener(
+                            task -> {
+                                Toast.makeText(getApplicationContext(),"A password reset email was sent to you",Toast.LENGTH_LONG).show();
+                                viewState = "LOGIN_STATE";
+                                passwordInputText.setVisibility(View.VISIBLE);
+                                newAccountButton.setVisibility(View.VISIBLE);
+
+                                loginButton.setText("LOGIN");
+                                headerDisplay.setText("LOGIN");
+                            }
+                    );
+                }
             }else if(viewState.equals("NEW_ACCOUNT_STATE")){
                 headerDisplay.setText("LOGIN");
                 reEnterPasswordInputText.setVisibility(View.INVISIBLE);
@@ -93,14 +127,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                  String password = passwordInputText.getText().toString().trim();
                  String fullname = nameInputText.getText().toString().trim();
 
-                 if(password.equals(reEnterPassword) && !email.isEmpty() && !fullname.isEmpty() ){
+                 if(password.equals(reEnterPassword) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(fullname)){
 
                      FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password).addOnCompleteListener(
                              task -> {
                                  FirebaseUser firebaseUser;
                                  firebaseUser = task.getResult().getUser();
                                  firebaseUser.sendEmailVerification();
-
+                                 if(task.isSuccessful()){
 
                                  UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder().setDisplayName(fullname).build();
                                  firebaseUser.updateProfile(profileUpdate);
@@ -114,14 +148,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                  intent.putExtra("name_id",firebaseUser.getDisplayName());
 
                                  startActivity(intent);
-                                 finish();
+                                 finish(); }
                              }
                      );
 
-                 }else if(email.isEmpty()){
+                 }else if(TextUtils.isEmpty(email)){
                      emailInputText.setBackgroundColor(Color.RED);
                      headerDisplay.setText("Email is empty");
-                }else if(fullname.isEmpty()){
+                }else if(TextUtils.isEmpty(fullname)){
                      emailInputText.setBackgroundColor(Color.WHITE);
                      nameInputText.setBackgroundColor(Color.RED);
                      headerDisplay.setText("Name is empty");
