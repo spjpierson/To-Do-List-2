@@ -34,4 +34,7 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="user_name">Name</string>
+    <string name="List_name">List Name</string>
+    <string name="Message">Message</string>
+    <string name="Schedule_Notification">Schedule Notification</string>
 </resources>
