@@ -1,16 +1,25 @@
 package com.piersonapps.todolist;
 
 
-import static com.piersonapps.todolist.CalendarActivity.kt;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+
 import android.app.AlertDialog;
+
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+
 import android.view.View;
+
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,14 +30,16 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Spinner;
+
+
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,12 +48,15 @@ import java.util.Objects;
 
 public class QuickViewList extends AppCompatActivity implements View.OnClickListener {
 
+
     private ImageButton addRowButton;
     private ImageButton editAllButton;
     private ImageButton saveAllButton;
     private ImageButton deleteRowButton;
     private ImageButton alaramButton;
     private ImageButton deleteListButton;
+
+    private ImageButton logutButton;
 
 
     private LinearLayout container;
@@ -84,7 +98,6 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
    private int screenWidth;
 
-
     private int columnWidth;
     private int buttonWidth;
 
@@ -92,8 +105,14 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quick_view_list);
+        Intent intent = getIntent();
 
-        dao = new DaoToDoList();
+        String userId = intent.getStringExtra("user_id");
+        String email_id = intent.getStringExtra("email_id");
+        String name_id = intent.getStringExtra("name_id");
+
+
+        dao = new DaoToDoList(FirebaseAuth.getInstance());
 
         lists = new ArrayList<>();
 
@@ -102,7 +121,8 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
 
             task.getResult().getChildren().iterator();
-            for(DataSnapshot child: task.getResult().getChildren()){
+       //TODO
+            for(DataSnapshot child: task.getResult().child(FirebaseAuth.getInstance().getUid()).getChildren()){
                 lists.add(child.getKey());
 
             }
@@ -121,6 +141,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
         deleteRowButton = findViewById(R.id.quick_view_delete_button);
         deleteListButton = findViewById(R.id.quick_view_delete_list_button);
         alaramButton = findViewById(R.id.quick_view_set_alarm_button);
+        logutButton = findViewById(R.id.quick_view_logutButton_button);
 
 
         container = findViewById(R.id.quick_view_layout_container);
@@ -161,6 +182,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
         editAllButton.setOnClickListener(this);
         saveAllButton.setOnClickListener(this);
         alaramButton.setOnClickListener(this);
+        logutButton.setOnClickListener(this);
         deleteRowButton.setOnClickListener(this);
         deleteListButton.setOnClickListener(this);
 
@@ -220,8 +242,8 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
                 }else if(!adapterView.getSelectedItem().toString().equals("Please Select Your List Or Create a New One")){
 
-
-                   dao.getDatabaseReference().child(adapterView.getSelectedItem().toString()).get().addOnCompleteListener(task -> {
+                    //TODO this may need to be delete
+                   dao.getDatabaseReference().child(FirebaseAuth.getInstance().getUid()).child(adapterView.getSelectedItem().toString()).get().addOnCompleteListener(task -> {
 
                        container.removeAllViews();
 
@@ -320,8 +342,8 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
         int cell = (screenWidth/10);
         columnWidth = cell * 2;
         buttonWidth = ((cell*2)/3)+10;
-
-        dao.getDatabaseReference().addValueEventListener(new ValueEventListener() {
+        //TODO
+        dao.getDatabaseReference().child(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -378,15 +400,10 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
         if(alaramButton.getId() == view.getId()){
             // Intent get an activity content
-            Intent calendarActivity = new Intent(this, kt);
+            Intent calendarActivity = new Intent(this,CalendarActivity.class);
             //start an activity
             startActivity(calendarActivity);
         }else if(deleteListButton.getId() == view.getId()){
-
-           /* !listsSpinner.getSelectedItem().equals("Add New List")
-                    && !listsSpinner.getSelectedItem().equals("Please Select Your List Or Create a New One")
-
-            */
 
         if(!listsSpinner.getSelectedItem().equals("Add New List") && !listsSpinner.getSelectedItem().equals("Please Select Your List Or Create a New One")) {
             AlertDialog.Builder builder = new AlertDialog.Builder(QuickViewList.this);
@@ -428,8 +445,8 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
                             }
                         }
 
-
-                        dao.getDatabaseReference().child(listsSpinner.getSelectedItem().toString()).get().addOnCompleteListener(task -> {
+                        //TODO
+                        dao.getDatabaseReference().child(FirebaseAuth.getInstance().getUid()).child(listsSpinner.getSelectedItem().toString()).get().addOnCompleteListener(task -> {
 
                             container.removeAllViews();
 
@@ -667,6 +684,10 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
 
              }
+        } else if(logutButton.getId() == view.getId()){
+            FirebaseAuth.getInstance().signOut();
+            finish();
+
         } else{
             int index = 0;
 
