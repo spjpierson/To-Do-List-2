@@ -2,27 +2,10 @@ package com.piersonapps.todolist
 
 import android.app.*
 import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.Settings.Global.getString
-import com.piersonapps.todolist.R
-import android.widget.CalendarView
-import android.widget.CalendarView.OnDateChangeListener
-import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
-import androidx.core.app.NotificationManagerCompat
-import android.content.Context as ContentContext
-import android.graphics.Color
 import android.icu.util.Calendar
-import android.icu.util.Calendar.getInstance
-import android.text.format.DateFormat
-import com.google.android.material.timepicker.TimeFormat
 import com.piersonapps.todolist.databinding.ActivityCalendarBinding
-import layout.channelID
-import layout.messageExtra
-import layout.notificationID
-import layout.titleExtra
 import java.util.*
 
 
@@ -88,12 +71,16 @@ class CalendarActivity: AppCompatActivity(){
     }
     private fun createNotificationChannel()
     {
-        val name = "Notification Channel"
+        val name = "Notif Channel"
         val desc = "TODO List Calendar Notification"
         val importance = NotificationManager.IMPORTANCE_DEFAULT
         val channel = NotificationChannel(channelID, name, importance)
         channel.description = desc
         val notificaitonManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificaitonManager.createNotificationChannel(channel)
+    }
+
+    companion object {
+        lateinit var kt: Class<*>
     }
 }

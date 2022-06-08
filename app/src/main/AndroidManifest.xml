@@ -8,7 +8,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ToDoList">
-        <receiver android:name="layout.Notification"
+        <receiver android:name=".Notification"
             android:enabled="true"/>
         <activity
             android:name=".LoginActivity"

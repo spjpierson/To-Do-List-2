@@ -1,25 +1,16 @@
 package com.piersonapps.todolist;
 
 
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-
+import static com.piersonapps.todolist.CalendarActivity.kt;
 import android.app.AlertDialog;
-
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
-
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-
 import android.view.View;
-
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,15 +21,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Spinner;
-
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -388,7 +378,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
         if(alaramButton.getId() == view.getId()){
             // Intent get an activity content
-            Intent calendarActivity = new Intent(this,CalendarActivity.class);
+            Intent calendarActivity = new Intent(this, kt);
             //start an activity
             startActivity(calendarActivity);
         }else if(deleteListButton.getId() == view.getId()){
