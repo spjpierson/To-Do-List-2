@@ -8,6 +8,12 @@
     android:orientation="vertical"
     tools:context=".CalendarActivity">
 
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/calendar_title_EditText"
+        android:layout_width="355dp"
+        android:layout_height="48dp"
+        android:hint="@string/Title" />
+
     <com.google.android.material.textfield.TextInputLayout
     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
     android:layout_width="match_parent"
@@ -15,61 +21,74 @@
     android:paddingHorizontal="20dp"
     android:layout_marginTop="20dp" >
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/calendar_title_EditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/List_name"/>
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/calendar_message_EditText"
+        android:layout_width="355dp"
+        android:layout_height="48dp"
+        android:hint="@string/Message" />
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="20dp"
-        android:layout_marginTop="20dp" >
+        android:layout_height="3dp"
+        android:layout_marginTop="20dp"
+        android:paddingHorizontal="20dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/calendar_message_EditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/Message"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp">
+
         <DatePicker
             android:id="@+id/calendar_DatePicker"
             android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="-30dp"
+            android:layout_marginEnd="30dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:datePickerMode="spinner"
             android:calendarViewShown="false"
+            android:datePickerMode="spinner"
             android:scaleX="0.7"
-            android:scaleY="0.7"
-            android:layout_marginLeft="-30dp"
-            android:layout_marginRight="30dp"/>
+            android:scaleY="0.7" />
+
         <TimePicker
             android:id="@+id/calendar_TimePicker"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:timePickerMode="spinner"
+            android:layout_height="229dp"
             android:layout_gravity="center"
+            android:layout_marginStart="-30dp"
+            android:layout_marginEnd="0dp"
+            android:layout_weight="1"
             android:scaleX="0.7"
             android:scaleY="0.7"
-            android:layout_marginLeft="-30dp"
-            android:layout_marginRight="30dp"/>
+            android:timePickerMode="spinner" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/Calender_ImageToUpload"
+        android:layout_width="101dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center_horizontal"
+        tools:ignore="ImageContrastCheck"
+        tools:srcCompat="@android:drawable/ic_menu_camera"
+        android:contentDescription="TODO" />
+
+    <Button
+        android:id="@+id/calendar_uploadImageBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/uploadImage" />
 
     <Button
         android:id="@+id/calendar_submitBtn"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:text="@string/Schedule_Notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/Schedule_Notification" />
 
 </LinearLayout>

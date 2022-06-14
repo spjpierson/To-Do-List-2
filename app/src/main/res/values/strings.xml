@@ -37,4 +37,6 @@
     <string name="List_name">List Name</string>
     <string name="Message">Message</string>
     <string name="Schedule_Notification">Schedule Notification</string>
+    <string name="Title">Title</string>
+    <string name="uploadImage">Upload Image</string>
 </resources>
