@@ -110,18 +110,19 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
 
             task.getResult().getChildren().iterator();
-       //TODO
             for(DataSnapshot child: task.getResult().child(FirebaseAuth.getInstance().getUid()).getChildren()){
                 lists.add(child.getKey());
 
             }
-            // to allow user to add new database
-            lists.add("Add New List");
 
         });
 
-        //null
+
         lists.add("Please Select Your List Or Create a New One");
+        // to allow user to add new database
+        lists.add("Add New List");
+        // to allow user to create a friends share list
+        lists.add("Create New Share List");
 
         addRowButton = findViewById(R.id.quick_view_add_row_button);
         saveAllButton = findViewById(R.id.quickview_save_all_button);
@@ -231,7 +232,6 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
                 }else if(!adapterView.getSelectedItem().toString().equals("Please Select Your List Or Create a New One")){
 
-                    //TODO this may need to be delete
                    dao.getDatabaseReference().child(FirebaseAuth.getInstance().getUid()).child(adapterView.getSelectedItem().toString()).get().addOnCompleteListener(task -> {
 
                        container.removeAllViews();
@@ -576,16 +576,6 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
                     hashMap.put("column3", toDoLists.get(i).getColumn3());
                     hashMap.put("column4", toDoLists.get(i).getColumn4());
 
-                    hashMap.put("address1", toDoLists.get(i).getAddress1());
-                    hashMap.put("address2", toDoLists.get(i).getAddress2());
-                    hashMap.put("city", toDoLists.get(i).getCity());
-                    hashMap.put("state", toDoLists.get(i).getState());
-                    hashMap.put("zip", toDoLists.get(i).getZip());
-
-                    hashMap.put("phone", toDoLists.get(i).getPhone());
-                    hashMap.put("email", toDoLists.get(i).getEmail());
-                    hashMap.put("store", toDoLists.get(i).getStore_type());
-
                     dao.update(toDoLists.get(i), toDoLists.get(i).getKey(), hashMap);
 
 
@@ -723,15 +713,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
                     hashMap.put("column3",toDoLists.get(index).getColumn3());
                     hashMap.put("column4",toDoLists.get(index).getColumn4());
 
-                    hashMap.put("address1",toDoLists.get(index).getAddress1());
-                    hashMap.put("address2",toDoLists.get(index).getAddress2());
-                    hashMap.put("city",toDoLists.get(index).getCity());
-                    hashMap.put("state",toDoLists.get(index).getState());
-                    hashMap.put("zip",toDoLists.get(index).getZip());
 
-                    hashMap.put("phone",toDoLists.get(index).getPhone());
-                    hashMap.put("email",toDoLists.get(index).getEmail());
-                    hashMap.put("store",toDoLists.get(index).getStore_type());
 
                     dao.update(toDoLists.get(index), toDoLists.get(index).getKey(),hashMap);
 
@@ -950,8 +932,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
             if(checkboxes.size() == 1 && newRow ){
               ToDoList list = new ToDoList(listName, rowId, true,
-                        false, column1,column2,column3,column4,
-                        null,null,null,null,0,0,null,null);
+                        false, column1,column2,column3,column4);
 
               toDoLists.add(list);
 
@@ -960,8 +941,7 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
             }else if(checkboxes.size() > 0 && newRow){
               ToDoList  list = new ToDoList(listName, rowId, false,
-                        false, column1,column2,column3,column4,
-                        null,null,null,null,0,0,null,null);
+                        false, column1,column2,column3,column4);
                 toDoLists.add(list);
 
 

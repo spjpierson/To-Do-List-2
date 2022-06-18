@@ -5,6 +5,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.icu.util.Calendar
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.piersonapps.todolist.databinding.ActivityCalendarBinding
 import java.util.*
 
@@ -20,6 +22,7 @@ class CalendarActivity: AppCompatActivity(){
         createNotificationChannel()
         binding.calendarSubmitBtn.setOnClickListener { scheduleNotification() }
     }
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun scheduleNotification()
     {
         val intent = Intent(applicationContext, Notification::class.java)

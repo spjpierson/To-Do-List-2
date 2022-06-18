@@ -51,10 +51,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        if (passwordInputText.getTextSize() < 6 && view.getId() == loginButton.getId()) {
+        if (passwordInputText.getText().toString().length() < 6 && view.getId() == loginButton.getId()) {
             Toast.makeText(getApplicationContext(), "Your password must be 6 or more characters long", Toast.LENGTH_LONG).show();
         }
-        else if (passwordInputText.getTextSize() < 6 && view.getId() == newAccountButton.getId()) {
+        else if (passwordInputText.toString().length() < 6 && view.getId() == newAccountButton.getId()) {
             Toast.makeText(getApplicationContext(), "Your password must be 6 or more characters long", Toast.LENGTH_LONG).show();
         }else if(view.getId() == loginButton.getId()){
             if(viewState.equals("LOGIN_STATE")){
@@ -137,7 +137,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                              task -> {
                                  FirebaseUser firebaseUser;
                                  firebaseUser = task.getResult().getUser();
-                                 firebaseUser.sendEmailVerification();
                                  if(task.isSuccessful()){
 
                                  UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder().setDisplayName(fullname).build();
