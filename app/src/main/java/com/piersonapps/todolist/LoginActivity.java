@@ -1,8 +1,5 @@
 package com.piersonapps.todolist;
 
-import androidx.annotation.ColorLong;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,10 +10,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.collection.LLRBNode;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,7 +51,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == loginButton.getId()){
+        if (passwordInputText.getTextSize() < 6 && view.getId() == loginButton.getId()) {
+            Toast.makeText(getApplicationContext(), "Your password must be 6 or more characters long", Toast.LENGTH_LONG).show();
+        }
+        else if (passwordInputText.getTextSize() < 6 && view.getId() == newAccountButton.getId()) {
+            Toast.makeText(getApplicationContext(), "Your password must be 6 or more characters long", Toast.LENGTH_LONG).show();
+        }else if(view.getId() == loginButton.getId()){
             if(viewState.equals("LOGIN_STATE")){
                 String email = emailInputText.getText().toString().trim();
                 String password = passwordInputText.getText().toString().trim();
@@ -85,6 +88,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                               loginButton.setText("REST PASSWORD");
                               headerDisplay.setText("REST PASSWORD");
                           }
+
                       }
 
                     });
