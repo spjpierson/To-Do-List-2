@@ -118,11 +118,9 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
         });
 
 
-        lists.add("Please Select Your List Or Create a New One");
         // to allow user to add new database
         lists.add("Add New List");
-        // to allow user to create a friends share list
-        lists.add("Create New Share List");
+        lists.add("Please Select Your List Or Create a New One");
 
         addRowButton = findViewById(R.id.quick_view_add_row_button);
         saveAllButton = findViewById(R.id.quickview_save_all_button);
@@ -799,6 +797,11 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
        container.addView(row);
     }
+
+
+
+
+
 
     private void addRowLayout(String listName, boolean newRow){
             LinearLayout row = new LinearLayout(this.getApplicationContext());
