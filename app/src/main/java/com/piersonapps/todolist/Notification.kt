@@ -1,5 +1,6 @@
 package com.piersonapps.todolist
 
+
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -15,6 +16,7 @@ const val messageExtra = "messageExtra"
 class Notification:BroadcastReceiver()
 {
     override fun onReceive(context: Context, intent: Intent) {
+
         val notification = NotificationCompat.Builder(context, channelID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle(intent.getStringExtra(titleExtra))
@@ -23,5 +25,7 @@ class Notification:BroadcastReceiver()
 
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 manager.notify(notificationID, notification)
+
+
     }
 }

@@ -119,8 +119,9 @@ public class QuickViewList extends AppCompatActivity implements View.OnClickList
 
 
         // to allow user to add new database
-        lists.add("Add New List");
         lists.add("Please Select Your List Or Create a New One");
+        lists.add("Add New List");
+
 
         addRowButton = findViewById(R.id.quick_view_add_row_button);
         saveAllButton = findViewById(R.id.quickview_save_all_button);

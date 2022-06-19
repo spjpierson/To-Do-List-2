@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.icu.util.Calendar
 import android.os.Build
+import android.provider.Settings
+import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
 import androidx.annotation.RequiresApi
 import com.piersonapps.todolist.databinding.ActivityCalendarBinding
 import java.util.*
@@ -39,13 +41,27 @@ class CalendarActivity: AppCompatActivity(){
         )
 
         val alarmManager = getSystemService(android.content.Context.ALARM_SERVICE) as AlarmManager
-        val time = getTime()
-        alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            time,
-            pendingIntent
-        )
-        showAlert(time, title, message)
+        // see if user has permission for alarm
+        val hasPermission: Boolean = alarmManager.canScheduleExactAlarms()
+
+        if(hasPermission) {
+
+            val time = getTime()
+            alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    time,
+                    pendingIntent
+            )
+            showAlert(time, title, message)
+        }else{
+            // If not ask for it
+            // go to exact alarm settings
+            Intent().apply {
+                action = ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+            }.also {
+                startActivity(it)
+            }
+        }
     }
     private fun showAlert(time: Long, title: String, message: String)
     {
